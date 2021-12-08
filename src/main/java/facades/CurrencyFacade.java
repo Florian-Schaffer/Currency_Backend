@@ -1,22 +1,25 @@
 package facades;
 
-import entities.RenameMe;
-import java.util.List;
+import utils.HttpUtils;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
  * Rename Class to a relevant name Add add relevant facade methods
  */
-public class FacadeExample {
+public class CurrencyFacade {
 
-    private static FacadeExample instance;
+    private static CurrencyFacade instance;
     private static EntityManagerFactory emf;
     
     //Private Constructor to ensure Singleton
-    private FacadeExample() {}
+    private CurrencyFacade() {}
     
     
     /**
@@ -24,10 +27,10 @@ public class FacadeExample {
      * @param _emf
      * @return an instance of this facade class.
      */
-    public static FacadeExample getFacadeExample(EntityManagerFactory _emf) {
+    public static CurrencyFacade getFacade(EntityManagerFactory _emf) {
         if (instance == null) {
             emf = _emf;
-            instance = new FacadeExample();
+            instance = new CurrencyFacade();
         }
         return instance;
     }
@@ -47,5 +50,16 @@ public class FacadeExample {
         }
         
     }
+
+    public double convert(int amount,String from, String to) throws IOException {
+
+
+        String json = HttpUtils.fetchData(amount, from, to);
+
+        System.out.println(json);
+        return amount*Double.parseDouble(json);
+        //her skal vi kalde eksternt API til at konvertere
+    }
+
 
 }
